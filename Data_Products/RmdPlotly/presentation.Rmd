@@ -1,0 +1,24 @@
+---
+title: "Week 3 Assignment"
+author: "Malu Mondelli"
+date: "October 4, 2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Spotify 
+### Despacito streams in each country (07/01/2017)
+
+```{r pressure, message = FALSE}
+library(plotly)
+df <- readRDS('./top200clean_01072017.Rda')
+df <- df[which(df$url == 'https://open.spotify.com/track/5CtI0qwDJkDQGwXD1H1cLb'),]
+
+
+plot_ly(df, x = ~mk, y = ~streams, type = "scatter")
+```
+
+## Thanks! :)
