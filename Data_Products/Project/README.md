@@ -5,7 +5,7 @@ This is an shiny application developed for the final project of the Developing D
 
 The main objective is to present some statistics about the internet service in Brazil graphically.
 
-The dataset was obtained through the 'transparency portal' maintained by the Brazilian government and can be accesed [here](http://dados.gov.br/dataset/resultado-consolidado-da-pesquisa-banda-larga-fixa).
+The dataset was obtained through the 'transparency portal' maintained by the Brazilian government and can be accessed [here](http://dados.gov.br/dataset/resultado-consolidado-da-pesquisa-banda-larga-fixa).
 
 The main features of the application are:
 
