@@ -1,0 +1,11 @@
+This Shiny application is part of the Developing Data Products Coursera course project https://www.coursera.org/learn/data-products/.
+
+It was used a dataset provided by the Brazilian government on the internet service offered by different companies.
+(Available at: http://dados.gov.br/dataset/resultado-consolidado-da-pesquisa-banda-larga-fixa)
+Statistics extracted from this dataset are displayed graphically through this shiny app.
+
+The code is available at https://github.com/mmondelli/datascience-coursera.
+
+An R presentation with additional information is available at https://github.com/mmondelli/datascience-coursera.
+
+October 12, 2017.
