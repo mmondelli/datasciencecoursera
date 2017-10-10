@@ -16,11 +16,11 @@ knitr::opts_chunk$set(echo = FALSE)
 - The idea is to present a shiny application developed for this project as well as its main characteristics.
 - The application presents graphically and interactively some statistics about the internet service in Brazil.
 
-## About the Dataset
+### About the Dataset
 
-- The dataset was obtained through the 'transparency portal' maintained by the Brazilian government.
-- It contains data on the internet service offered by different companies.
+- The dataset was obtained through the 'transparency portal' maintained by the Brazilian government and contains data on the internet service offered by different companies.
 - Available at: http://dados.gov.br/dataset/resultado-consolidado-da-pesquisa-banda-larga-fixa
+
 
 ## The application
 
@@ -29,6 +29,22 @@ knitr::opts_chunk$set(echo = FALSE)
 - The Statistics menu, where the user can choose an internet company to analyze the percentage of service channels used in each state by year (2015 and 2016).
 - By choosing a state, the user can view the percentage of scores on the quality of service, assigned by users in that state (for a specific company).
 - Also, the application allows access and filtering the dataset according to the user's interest in the Dataset menu.
+
+## Example of statistic extracted from the dataset
+
+- A calculation allows to obtain the coverage of each company (number of states where each company offers the service):
+
+```{r, eval=TRUE}
+blf.df <- read.csv('./Data/banda_larga_fixa2.csv', 
+               header=T, sep=';',
+               fileEncoding = "UTF-8"); topic <- unique(blf.df$TEMA)
+aux <- unique(blf.df[blf.df$TEMA == topic[1],])
+calc <- aux[,c(2,3)]; calc <- calc[!grepl("Total", calc$ESTADO),]
+calc <- unique(calc)
+calc <- aggregate(ESTADO ~ OPERADORA, data = calc, FUN = function(x){NROW(x)})
+colnames(calc) <- c('Company', 'States'); head(calc)
+
+```
 
 
 ## Useful Links
