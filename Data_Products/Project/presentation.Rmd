@@ -34,7 +34,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Useful Links
 
 - Source Code: https://github.com/mmondelli/datasciencecoursera/tree/master/Data_Products/Project
-- This presentation:
+- This presentation: https://mmondelli.github.io/datasciencecoursera/Data_Products/Project/presentation.html
 - The application: https://mmondelli.shinyapps.io/data_products_project_-_coursera/
 - Any questions, feel free to contact me: mluiza@lncc.br
 
