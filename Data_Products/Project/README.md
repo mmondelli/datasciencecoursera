@@ -17,6 +17,6 @@ Source code for the project is available on the [GitHub](https://github.com/mmon
 
 The application can be accessed [here](https://mmondelli.shinyapps.io/data_products_project_-_coursera/).
 
-The presentation for the project can be found [here]:(https://mmondelli.github.io/datasciencecoursera/Data_Products/Project/presentation.html).
+The presentation for the project can be found [here](https://mmondelli.github.io/datasciencecoursera/Data_Products/Project/presentation.html).
 
 
