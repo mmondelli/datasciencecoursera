@@ -1,0 +1,41 @@
+---
+title: "Course Project"
+subtitle: "Developing Data Products"
+author: "Malu Mondelli"
+date: "October 11, 2017"
+output: ioslides_presentation
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Overview
+
+- This presentation is being created as part of the final project of the Developing Data Products course (Coursera).
+- The idea is to present a shiny application developed for this project as well as its main characteristics.
+- The application presents graphically and interactively some statistics about the internet service in Brazil.
+
+## About the Dataset
+
+- The dataset was obtained through the 'transparency portal' maintained by the Brazilian government.
+- It contains data on the internet service offered by different companies.
+- Available at: http://dados.gov.br/dataset/resultado-consolidado-da-pesquisa-banda-larga-fixa
+
+## The application
+
+### The main features of the application are:
+
+- The Statistics menu, where the user can choose an internet company to analyze the percentage of service channels used in each state by year (2015 and 2016).
+- By choosing a state, the user can view the percentage of scores on the quality of service, assigned by users in that state (for a specific company).
+- Also, the application allows access and filtering the dataset according to the user's interest in the Dataset menu.
+
+
+## Useful Links
+
+- Source Code: https://github.com/mmondelli/datasciencecoursera/tree/master/Data_Products/Project
+- This presentation:
+- The application: https://mmondelli.shinyapps.io/data_products_project_-_coursera/
+- Any questions, feel free to contact me: mluiza@lncc.br
+
+### Thanks!
