@@ -15,7 +15,7 @@ The main features of the application are:
 
 Source code for the project is available on the [GitHub](https://github.com/mmondelli/datasciencecoursera/tree/gh-pages/Data_Products/Project).
 
-The application can be accessed [here](https://mmondelli.shinyapps.io/data_products_project_-_coursera/).
+The application can be accessed [here](https://mmondelli.shinyapps.io/internetservicebrazil/).
 
 The presentation for the project can be found [here](https://mmondelli.github.io/datasciencecoursera/Data_Products/Project/presentation.html).
 

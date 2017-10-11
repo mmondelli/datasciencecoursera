@@ -9,6 +9,6 @@ Statistics extracted from this dataset are displayed graphically through this sh
 
 The code is available at https://github.com/mmondelli/datasciencecoursera/blob/gh-pages/Data_Products/Project/
 
-An R presentation with additional information is available at https://github.com/mmondelli/datasciencecoursera/blob/gh-pages/Data_Products/Project/presentation.html.
+An R presentation with additional information is available at https://mmondelli.github.io/datasciencecoursera/Data_Products/Project/presentation.html.
 
 October 12, 2017.
