@@ -6,15 +6,17 @@ library(shinythemes)
 shinyUI(navbarPage(theme = shinytheme("cosmo"),
                    "Internet Service in Brazil",
                    tabPanel("Statistics",
-                            sidebarPanel(
+                            sidebarPanel(width = 3,
                               selectInput("company", "Choose a company:",
                                           choices = companies
                                          ),
                               selectInput("state", "Choose a state:",
                                           choices = states
                               )
+                              ,
+                              h4("Total number of states covered by this company:", textOutput("coverage"))
                             ),
-                            mainPanel(
+                            mainPanel(width = 9,
                               tabsetPanel(
                                 tabPanel("Channels",
                                          h3('Percentage of service channels used in each state by year.'),

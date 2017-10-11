@@ -38,6 +38,17 @@ shinyServer(function(input, output) {
     aux <- rbind(a, b)
   })
   
+  dt3 <- reactive({
+    aux <- unique(blf.df[blf.df$TEMA == topic[1],])
+    calc <- aux[,c(2,3)]; calc <- calc[!grepl("Total", calc$ESTADO),]
+    calc <- unique(calc)
+    calc <- aggregate(ESTADO ~ OPERADORA, data = calc, FUN = function(x){NROW(x)})
+    print(calc)
+    calc <- calc[grepl(input$company, calc$OPERADORA),]
+    colnames(calc) <- c('Company', 'States')
+    as.character(calc[2])
+  })
+  
   output$plotChannel2015 <- renderPlot({
     ggplot() +
       geom_bar(data = dt1(), aes(y = X2015, x = ESTADO, fill = Type),
@@ -83,4 +94,8 @@ shinyServer(function(input, output) {
     
   })
   
-  output$dataset <- renderDataTable(blf.df)})
+  output$dataset <- renderDataTable(blf.df)
+  output$coverage <- renderText(dt3())
+  
+  
+})
