@@ -1,0 +1,175 @@
+---
+title: "Practical Machine Learning - Final Project"
+subtitle: "Human Activity Recognition"
+author: "Maria Luiza Mondelli"
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
+library(dplyr)
+library(data.table)
+library(ggRandomForests)
+library(parallel)
+library(foreach)
+library(doParallel)
+#options(rf.cores=detectCores(), mc.cores=detectCores())
+set.seed(1234) 
+```
+## Introduction
+
+This project is based on data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants that were asked to perform barbell lifts correctly and incorrectly in 5 different ways (or classes) as follows:
+
+(A) Exactly according to the specification 
+(B) Throwing the elbows to the front
+(C) Lifting the dumbbell only halfway
+(D) Lowering the dumbbell only halfway
+(E) Throwing the hips to the front
+
+The goal of this project is to predict the manner in which the participants did the exercise. 
+
+## First things first: getting the data
+
+We will first download the training and testing datasets:
+
+```{r get_data}
+data_dir = "./data"
+training_url = "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+test_url = "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+if (!file.exists(data_dir)) {
+  dir.create(data_dir)
+}
+if (!file.exists(file.path(data_dir, 'training.csv'))) {
+  download.file(training_url, destfile=file.path(data_dir, 'training.csv'))
+}
+if (!file.exists(file.path(data_dir, 'test.csv'))) {
+  download.file(test_url, destfile=file.path(data_dir, 'test.csv'))
+}
+
+training <- read.csv(file.path(data_dir, 'training.csv'))
+testing <- read.csv(file.path(data_dir, 'test.csv'))
+```
+
+## Preprocessing 
+
+Then, we can have a look of what the data contains:
+
+```{r look}
+dim(training); dim(testing)
+colnames(training)
+#summary(training)
+```
+
+Some variables contain NA values and zero-length strings. Then, we need to perform a data cleaning step in order to prepare the data that will be consumed by the ML algorithms (for both test and training datasets). First, we can replace zero-length strings with NA values. After that, we can remove the variables that contain NA values, reducing the dimensionality of our data.
+
+```{r na_values}
+# Replace zero-length strings
+training[training == "" ] <- NA
+testing[testing == "" ] <- NA
+# Remove variables with NA values
+training <- training[, colSums(is.na(training)) == 0]
+testing <- testing[, colSums(is.na(testing)) == 0]
+# Check dimensions
+dim(training); dim(testing)
+```
+
+Also, we can remove the first 7 variables, since they are related to the project setting (participant name, timestamps, etc) and do not seem to impact the outcome:
+
+```{r cleaning}
+training <- training[,-c(1:7)]
+variables <- colnames(training)[-53] # Remove the classe variable 
+testing <- testing[, variables]
+```
+
+To identify if other features need to be removed from the dataset, we can use the *nearZeroVar* function that basically will look for features without variability.
+
+```{r zerovar}
+zeroVar <- nearZeroVar(training, saveMetrics=TRUE); zeroVar
+```
+
+Since all selected features so far do have enough variance, we can keep all of them.
+
+## Modeling
+
+Before training the models, we will perform some configuration:
+
+```{r config, eval=FALSE}
+clusters <- makeCluster(detectCores() - 2)
+registerDoParallel(clusters, cores = detectCores() - 2)
+train.ctrl <- trainControl(method = "cv",
+                        number = 4,
+                        allowParallel = TRUE,
+                        verboseIter = TRUE)
+```
+
+We can also split the training dataset, so we wiil be able to check the accuracy of the models later:
+
+```{r split}
+inTrain <- createDataPartition(y = training$classe,
+                               p = 0.7,
+                               list = F)
+train <- training[inTrain, ]; test <- training[-inTrain, ]
+```
+
+Then, we will use the Random Forest and Stochastic Gradient Boosting methods to perform the predictions.
+
+### Random Forest
+
+```{r randomforest, eval = F}
+model.rf <- train(classe ~ .,
+                  data = train,
+                  method = "rf",
+                  trControl = train.ctrl)
+#pred.rf <- predict(model.rf, test)
+```
+
+
+### Stochastic Gradient Boosting
+
+```{r gbm, eval=FALSE}
+model.gbm <- train(classe ~ .,
+                   data = train,
+                   method = "gbm",
+                   trControl = train.ctrl)
+#pred.gbm <- predict(model.gbm, test)
+```
+
+Saving the models:
+
+```{r savemodels, eval=FALSE}
+saveRDS(model.rf, paste0(data_dir, "/model_rf.rds"))
+saveRDS(model.gbm, paste0(data_dir, "/model_gbm.rds"))
+```
+
+### Checking accuracy
+
+```{r readmodels}
+model.rf <- readRDS(paste0(data_dir, "/model_rf.rds"))
+model.gbm <- readRDS(paste0(data_dir, "/model_gbm.rds"))
+pred.rf <- predict(model.rf, test)
+pred.gbm <- predict(model.gbm, test)
+```
+
+```{r accuracy}
+accuracy.rf <- confusionMatrix(pred.rf, test$classe)$overall['Accuracy']
+accuracy.gbm <- confusionMatrix(pred.gbm, test$classe)$overall['Accuracy']
+df <- data.frame(models = c('RF', 'GBM'),
+                 accuracy = c(accuracy.rf, accuracy.gbm))
+ggplot(df, aes(x = models, y = accuracy)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  geom_text(aes(label=round(accuracy, 2)), vjust=1.6, color="white", size=3.5) +
+  labs(x = 'Models', y = 'Accuracy', title = 'Accuracy obtained') +
+  theme_minimal() 
+
+```
+
+### Predicting with the test dataset
+
+Finally, we will use the downloaded test dataset to predict the 'classe' using RF:
+
+```{r predict test}
+pred.test <- predict(model.rf, testing); pred.test
+```
